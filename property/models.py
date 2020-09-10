@@ -1,17 +1,25 @@
 from django.db import models
 from django.utils import timezone
+from django.conf import settings
+
+
+class Complaint(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Кто жаловался")
+    flat = models.ForeignKey("Flat", on_delete=models.CASCADE, verbose_name="Квартира, на которую жаловались")
+    complaint_text = models.TextField("Тест жалобы")
 
 
 class Flat(models.Model):
     owner = models.CharField("ФИО владельца", max_length=200)
     owners_phonenumber = models.CharField("Номер владельца", max_length=20)
     created_at = models.DateTimeField("Когда создано объявление", default=timezone.now, db_index=True)
-    
+
     description = models.TextField("Текст объявления", blank=True)
     price = models.IntegerField("Цена квартиры", db_index=True)
 
     town = models.CharField("Город, где находится квартира", max_length=50, db_index=True)
-    town_district = models.CharField("Район города, где находится квартира", max_length=50, blank=True, help_text='Чертаново Южное')
+    town_district = models.CharField("Район города, где находится квартира", max_length=50, blank=True,
+                                     help_text='Чертаново Южное')
     address = models.TextField("Адрес квартиры", help_text='ул. Подольских курсантов д.5 кв.4')
     floor = models.CharField("Этаж", max_length=3, help_text='Первый этаж, последний этаж, пятый этаж')
 
