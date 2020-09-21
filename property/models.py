@@ -2,6 +2,8 @@ from django.db import models
 from django.utils import timezone
 from django.conf import settings
 
+from phonenumber_field.modelfields import PhoneNumberField
+
 
 class Complaint(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Кто жаловался")
@@ -11,6 +13,7 @@ class Complaint(models.Model):
 
 class Flat(models.Model):
     owner = models.CharField("ФИО владельца", max_length=200)
+    owner_pure_phone = PhoneNumberField(blank=True)
     owners_phonenumber = models.CharField("Номер владельца", max_length=20)
     created_at = models.DateTimeField("Когда создано объявление", default=timezone.now, db_index=True)
 
