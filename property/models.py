@@ -8,10 +8,15 @@ from phonenumber_field.modelfields import PhoneNumberField
 class Complaint(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE,
+                             related_name='complaints',
                              verbose_name='Кто жаловался')
     flat = models.ForeignKey('Flat', on_delete=models.CASCADE,
+                             related_name='complaints',
                              verbose_name='Квартира, на которую жаловались')
     complaint_text = models.TextField('Текст жалобы')
+
+    def __str__(self):
+        return f'Жалоба {self.user}'
 
 
 class Owner(models.Model):
@@ -21,7 +26,7 @@ class Owner(models.Model):
     owner_pure_phone = PhoneNumberField(blank=True,
                                         verbose_name='Нормализованный '
                                                      'номер владельца')
-    flats = models.ManyToManyField('Flat', related_name='owned_by',
+    flats = models.ManyToManyField('Flat', related_name='owners',
                                    verbose_name='Квартиры в собственности',
                                    blank=True)
 
